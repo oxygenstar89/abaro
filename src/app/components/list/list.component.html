@@ -1,0 +1,16 @@
+@if(cards$ | async; as cardsData ) {
+  <mat-accordion>
+    @for(card of cardsData; track card.id; let i = $index) {
+      @defer (on viewport) {
+        <div [id]="card.id" class="list-item-wrapper">
+          <app-list-item [cardData]="card" [indexNumber]="i+1"></app-list-item>
+        </div>
+      }
+      @placeholder {
+        <div class="placeholder"></div>
+      }
+    } @empty {
+      No cards to show
+    }
+  </mat-accordion>
+}

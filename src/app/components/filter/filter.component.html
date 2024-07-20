@@ -1,0 +1,9 @@
+<mat-form-field>
+  <mat-label>{{type}}</mat-label>
+  <mat-select (selectionChange)="filterSelected(type, $event)">
+    <mat-option value="none">none</mat-option>
+    @for (value of list; track $index) {
+      <mat-option [value]="value">{{value}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

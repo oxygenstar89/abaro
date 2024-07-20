@@ -1,0 +1,115 @@
+<div class="detais-wrapper">
+  <div class="img-wrapper">
+    <img mat-card-image [src]="cardDetails.images.small" (load)="imageLoaded = true">
+    @if(!imageLoaded) {
+      <span class="placeholder"></span>
+    }
+  </div>
+  <div class="types-wrapper">
+    @if(cardDetails.types) {
+      <span>Types:</span>
+      @for(type of cardDetails.types; track $index; let i = $index) {
+        @if(types$ | async; as types) {
+          <mat-form-field>
+            <mat-label>Type</mat-label>
+            <mat-select
+              [value]="type"
+              (selectionChange)="editType($event, i, 'types')"
+            >
+              @for (value of types; track $index) {
+                <mat-option [value]="value">{{value}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field><br>
+        }
+      }
+    }
+    @if(cardDetails.subtypes) {
+      <span>Subtypes:</span>
+      @for(type of cardDetails.subtypes; track $index; let i = $index) {
+        @if(subtypes$ | async; as types) {
+          <mat-form-field>
+            <mat-label>Subtype</mat-label>
+            <mat-select
+              [value]="type"
+              (selectionChange)="editType($event, i, 'subtypes')"
+            >
+              @for (value of types; track $index) {
+                <mat-option [value]="value">{{value}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field><br>
+        }
+      }
+    }
+    <span>Supertype: {{cardDetails.supertype}}</span>
+      <mat-form-field>
+        <mat-label>Supertype</mat-label>
+          @if(supertypes$ | async; as types) {
+              <mat-select
+                [value]="cardDetails.supertype"
+                (selectionChange)="editSupertype($event)"
+                >
+                @for (value of types; track $index) {
+                  <mat-option [value]="value">{{value}}</mat-option>
+                }
+              </mat-select>
+          }
+      </mat-form-field>
+  </div>
+  @if(cardDetails.supertype === "Pokémon") {
+    <div class="stats-wrapper">
+      Pokemon stats:
+      <ul>
+        <li>
+          <span>HP: <strong>{{cardDetails.hp}}</strong></span>
+        </li>
+        @if(cardDetails.level) {
+          <li>
+            <span>Level: <strong>{{cardDetails.level}}</strong></span>
+          </li>
+        }
+        <li class="attacks">
+          Attacks:
+            @for(attack of cardDetails.attacks; let i = $index; track attack.name) {
+              <div class="attack-wrapper">
+                <span>
+                  Attack name: <strong>{{attack.name}}</strong>
+                  <button class="edit" (click)="editAttack(i, 'name', 'Attack name')">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="15px" width="15px">
+                      <use xlink:href="assets/icons.svg#edit"></use>
+                    </svg>
+                  </button>
+                </span>
+                @if(attack.damage) {
+                  <span>
+                    Damage: <strong>{{attack.damage}}</strong>
+                    <button class="edit" (click)="editAttack(i, 'damage', 'Damage')">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="15px" width="15px">
+                        <use xlink:href="assets/icons.svg#edit"></use>
+                      </svg>
+                    </button>
+                  </span>
+                }
+                <span>
+                  Converted Energy Cost: <strong>{{attack.convertedEnergyCost}}</strong>
+                </span>
+              </div>
+            } @empty {
+              <span>no attacks</span>
+            }
+        </li>
+      </ul>
+    </div>
+    @if(showSimilarPokemons) {
+      <div class="similar-pokemons">
+        Similar pokemons:
+          @for (pokemon of similar; track $index) {
+            @if(pokemon.id !== cardDetails.id) {
+              <button (click)="scroll(pokemon.id)">{{pokemon.name}}</button>
+            }
+          }
+      </div>
+    }
+  }
+</div>

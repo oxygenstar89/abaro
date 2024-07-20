@@ -1,13 +1,102 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Card, FilterType, SelectedFilters } from './services/pokedex-data.model';
+import { ListComponent } from "./components/list/list.component";
+import { FilterComponent } from "./components/filter/filter.component";
+import { Subscription, combineLatest, map } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectSubtypes, selectSupertypes, selectTypes } from './store/types/types.selector';
+import { loadSubtypes, loadSupertypes, loadTypes } from './store/types/types.actions';
+import { selectCards, selectCardsLoadingState } from './store/cards/cards.selector';
+import { loadCards, loadCardsWithFilters, setSimilarPokemons } from './store/cards/cards.actions';
+import { PokedexDataService } from './services/pokedex-data.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [
+    AsyncPipe,
+    ListComponent,
+    FilterComponent
+],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  title = 'pokedex';
+export class AppComponent implements OnInit {
+  readonly store = inject(Store);
+  readonly pokedexDataService = inject(PokedexDataService);
+
+  private selectedFilters: SelectedFilters = {
+    type: '',
+    supertype: '',
+    subtype: '',
+  }
+  private subscriptions = new Subscription;
+  types$ = this.store.select(selectTypes);
+  subtypes$ = this.store.select(selectSubtypes);
+  supertypes$ = this.store.select(selectSupertypes);
+  cards$ = this.store.select(selectCards);
+  cardsLoading$ = this.store.select(selectCardsLoadingState);
+
+  ngOnInit(): void {
+    this.store.dispatch(loadTypes());
+    this.store.dispatch(loadSubtypes());
+    this.store.dispatch(loadSupertypes());
+    this.store.dispatch(loadCards());
+    this.subscriptions.add(
+      combineLatest({
+          types: this.types$,
+          cards: this.cards$
+        }).pipe(
+          map(
+            ({types, cards}) => {
+              const similarPokemons = this.getSimilarPokemons(cards, types);
+              return ({similarPokemons});
+            }
+          )
+        ).subscribe(
+          ({similarPokemons}) => {
+            this.store.dispatch(setSimilarPokemons({data: similarPokemons}));
+          }
+        )
+    );
+
+
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  filterData({type, value}: {type: FilterType, value:string}) {
+    this.selectedFilters = {
+      ...this.selectedFilters,
+      [type]: value.toLowerCase(),
+    };
+    //TODO handle types with more than one word to avoid errors
+    this.store.dispatch(loadCardsWithFilters({filters: this.selectedFilters}));
+  }
+
+  getSimilarPokemons(cards: Card[], types: string[]) {
+    const pokemonsOfSameType: any = {};
+    types.map(
+      (type: string) => {
+        pokemonsOfSameType[type] = [];
+      }
+    );
+    cards.forEach(
+      (card) => {
+        if(card.supertype === 'Pokémon' && card.types?.length) {
+          card.types.forEach(
+            (type) => {
+              pokemonsOfSameType[type] = [...pokemonsOfSameType[type], {name: card.name, id: card.id}]
+            }
+          );
+        }
+      }
+    );
+    return pokemonsOfSameType;
+  }
+
 }

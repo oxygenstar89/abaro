@@ -1,0 +1,74 @@
+.img-wrapper {
+  position: relative;
+  max-width: 200px;
+
+  img {
+    max-width: 100%;
+  }
+
+  .placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    min-height: 275px;
+  }
+}
+
+.detais-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.types-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.stats-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px;
+
+  ul {
+    li {
+      &.attacks {
+        span {
+          display: block;
+        }
+
+        .edit {
+          cursor: pointer;
+          width: 15px;
+          height: 15px;
+          padding: 0;
+          border: 0;
+          background-color: transparent;
+        }
+
+        .attack-wrapper {
+          margin-bottom: 5px;
+          background: lightgray;
+          padding: 5px;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+}
+
+.similar-pokemons {
+  padding: 5px;
+
+  button {
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+}

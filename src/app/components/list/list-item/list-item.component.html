@@ -1,0 +1,10 @@
+<mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{indexNumber}} {{cardData.name}}</mat-panel-title>
+  </mat-expansion-panel-header>
+  @if((indexNumber < 12 || panelOpenState())) {
+    @if(similarPokemons$ | async; as similarPokemons) {
+      <app-list-item-details [cardDetails]="cardData" [similarPokemons]="similarPokemons" [indexNumber]="indexNumber"></app-list-item-details>
+    }
+  }
+</mat-expansion-panel>
