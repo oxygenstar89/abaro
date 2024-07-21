@@ -48,7 +48,7 @@ export class ListItemDetailsComponent implements OnInit {
 
   editAttack(index: number, dataToEdit: 'damage' | 'name', name: string ) {
     const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: {name, currentValue: this.cardDetails.attacks[index][dataToEdit]},
+      data: {name, currentValue: this.cardDetails.attacks?.[index][dataToEdit]},
     });
 
     dialogRef.afterClosed().subscribe((result: string) => {

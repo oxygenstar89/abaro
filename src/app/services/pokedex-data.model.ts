@@ -15,39 +15,32 @@ export type Card = {
   name: string,
   supertype: string,
   subtypes?: string[],
-  level: string,
+  level?: string,
   hp: string,
   types?: string[],
-  evolvesFrom: string,
+  evolvesFrom?: string,
   evolvesTo?: string[],
-  abilities: [
-      {
-          name: string,
-          text: string,
-          type: string,
-      }
-  ],
-  attacks: [
-      {
-          name: string,
-          cost: string[],
-          convertedEnergyCost: number,
-          damage: string,
-          text: string,
-      }
-  ],
-  weaknesses: [
-      {
-          type: string,
-          value: string
-      }
-  ],
-  resistances: [
-      {
-        type: string,
-        value: string
-      }
-  ],
+  abilities?: {
+    name: string,
+    text: string,
+    type: string,
+  }[]
+  ,
+  attacks?: {
+    name: string,
+    cost: string[],
+    convertedEnergyCost: number,
+    damage: string,
+    text: string,
+  }[],
+  weaknesses: {
+    type: string,
+    value: string
+  }[],
+  resistances?: {
+    type: string,
+    value: string
+  }[],
   retreatCost: string[],
   convertedRetreatCost: number,
   set: {
@@ -81,14 +74,22 @@ export type Card = {
   tcgplayer: {
       url: string,
       updatedAt: string,
-      prices: {
-          [key: string]: {
-            low: number,
-            mid: number,
-            high: number,
-            market: number,
-            directLow: null
-          },
+      prices?: {
+        holofoil?: {
+          low: number,
+          mid: number,
+          high: number,
+          market: number,
+          directLow: null | number
+        },
+        reverseHolofoil?: {
+          low: number,
+          mid: number,
+          high: number,
+          market: number,
+          directLow: number | null
+        },
+        normal?: { low: number; mid: number; high: number; market: number; directLow: number; }
       }
   },
   cardmarket: {
