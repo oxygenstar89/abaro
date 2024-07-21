@@ -89,3 +89,22 @@ export const loadCardsFailure = createAction(
     }
   >()
 );
+
+export const loadMore = createAction(
+  '[Cards] LoadMore',
+  props<
+    {
+      filters: SelectedFilters,
+      page: number,
+    }
+  >()
+);
+
+export const loadMoreSuccess = createAction(
+  '[Cards] LoadMoreSuccess',
+  props<
+    {
+      payload: any,
+    }
+  >()
+);

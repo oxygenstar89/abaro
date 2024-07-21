@@ -38,7 +38,7 @@
               loading...
           } @else {
             <div class="list-wrapper">
-              <app-list></app-list>
+              <app-list (loadMore)="loadMore($event)"></app-list>
             </div>
           }
         }

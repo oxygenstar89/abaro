@@ -10,8 +10,8 @@ export class PokedexDataService {
 
   constructor(private apiRequests: ApiRequestsService) { }
 
-  getCards(selectedFilters?: SelectedFilters) {
-    return this.apiRequests.getCards(selectedFilters).pipe(
+  getCards(selectedFilters?: SelectedFilters, page?: number) {
+    return this.apiRequests.getCards(selectedFilters, page).pipe(
       map(
         ({data}: Cards) => {
           return data;

@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { selectSubtypes, selectSupertypes, selectTypes } from './store/types/types.selector';
 import { loadSubtypes, loadSupertypes, loadTypes } from './store/types/types.actions';
 import { selectCards, selectCardsLoadingState } from './store/cards/cards.selector';
-import { loadCards, loadCardsWithFilters, setSimilarPokemons } from './store/cards/cards.actions';
+import { loadCards, loadCardsWithFilters, loadMore, setSimilarPokemons } from './store/cards/cards.actions';
 import { PokedexDataService } from './services/pokedex-data.service';
 
 @Component({
@@ -97,6 +97,10 @@ export class AppComponent implements OnInit {
       }
     );
     return pokemonsOfSameType;
+  }
+
+  loadMore(page: number) {
+    this.store.dispatch(loadMore({filters: this.selectedFilters, page}));
   }
 
 }

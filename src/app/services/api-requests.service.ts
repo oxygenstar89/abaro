@@ -9,7 +9,7 @@ export class ApiRequestsService {
 
   constructor(private http: HttpClient) { }
 
-  getCards(selectedFilters?: SelectedFilters) {
+  getCards(selectedFilters?: SelectedFilters, page?: number) {
     let query = '';
     if(selectedFilters?.subtype || selectedFilters?.supertype || selectedFilters?.type) {
       const subtype = selectedFilters?.subtype && selectedFilters?.subtype !== 'none' ? 'subtypes:' + selectedFilters?.subtype : '';
@@ -18,7 +18,7 @@ export class ApiRequestsService {
       query = `${subtype} ${type} ${supertype}`;
     }
     return this.http
-    .get<Cards>('https://api.pokemontcg.io/v2/cards', { params: {'q': query, pageSize: 100, page: 1} });
+    .get<Cards>('https://api.pokemontcg.io/v2/cards', { params: {'q': query, page: page || 1, pageSize: 100} });
   }
 
   getSubtypes() {

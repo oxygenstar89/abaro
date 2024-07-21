@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { loadCards, loadCardsFailure, loadCardsSuccess, loadCardsWithFilters, loadCardsWithFiltersSuccess, setSimilarPokemons, updateCardAttack, updateCardSupertype, updateCardTypes } from "./cards.actions";
+import { loadCards, loadCardsFailure, loadCardsSuccess, loadCardsWithFilters, loadCardsWithFiltersSuccess, loadMore, loadMoreSuccess, setSimilarPokemons, updateCardAttack, updateCardSupertype, updateCardTypes } from "./cards.actions";
 import { Card, SimilarPokemons, StoreCardsType } from "../../services/pokedex-data.model";
 
 const initialState: {cards: StoreCardsType, similarPokemons: SimilarPokemons} = {
@@ -108,6 +108,27 @@ export const cardsReducer = createReducer(
         ...state.cards,
         loading: false,
         data: payload
+      }
+    };
+  }),
+
+  on(loadMore, state => {
+    return {
+      ...state,
+      cards: {
+        ...state.cards,
+        loading: false,
+      }
+    };
+  }),
+
+  on(loadMoreSuccess, (state, { payload }) => {
+    return {
+      ...state,
+      cards: {
+        ...state.cards,
+        loading: false,
+        data: [...state.cards.data, ...payload]
       }
     };
   }),

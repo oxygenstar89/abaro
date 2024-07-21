@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loadCards, loadCardsFailure, loadCardsSuccess, loadCardsWithFilters, loadCardsWithFiltersSuccess } from './cards.actions';
+import { loadCards, loadCardsFailure, loadCardsSuccess, loadCardsWithFilters, loadCardsWithFiltersSuccess, loadMore, loadMoreSuccess } from './cards.actions';
 import { switchMap, catchError, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PokedexDataService } from '../../services/pokedex-data.service';
@@ -28,6 +28,18 @@ export class CardsEffects {
           map(data => loadCardsWithFiltersSuccess({ payload: data })),
           catchError(error => of(loadCardsFailure({ payload: error })))
         )
+      )
+    )
+  );
+
+  loadMore$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadMore),
+      switchMap(({filters, page, type}: any) =>
+          this.pokedexDataService.getCards(filters, page).pipe(
+            map(data => loadMoreSuccess({ payload: data })),
+            // catchError(error => of(loadCardsFailure({ payload: error })))
+          )
       )
     )
   );

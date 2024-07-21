@@ -13,4 +13,7 @@
       No cards to show
     }
   </mat-accordion>
+  @if(!(cardsData.length % 100)) {
+    <button mat-stroked-button (click)="loadMorePokemons((cardsData.length/100)+1)">Load More</button>
+  }
 }
