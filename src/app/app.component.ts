@@ -10,6 +10,8 @@ import { loadSubtypes, loadSupertypes, loadTypes } from './store/types/types.act
 import { selectCards, selectCardsLoadingState } from './store/cards/cards.selector';
 import { loadCards, loadCardsWithFilters, loadMore, setSimilarPokemons } from './store/cards/cards.actions';
 import { PokedexDataService } from './services/pokedex-data.service';
+import { MatButtonModule } from '@angular/material/button';
+import { ThemingService } from './services/theming.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +19,8 @@ import { PokedexDataService } from './services/pokedex-data.service';
   imports: [
     AsyncPipe,
     ListComponent,
-    FilterComponent
+    FilterComponent,
+    MatButtonModule,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -25,6 +28,7 @@ import { PokedexDataService } from './services/pokedex-data.service';
 })
 export class AppComponent implements OnInit {
   readonly store = inject(Store);
+  readonly themingService = inject(ThemingService);
   readonly pokedexDataService = inject(PokedexDataService);
 
   private selectedFilters: SelectedFilters = {
@@ -101,6 +105,10 @@ export class AppComponent implements OnInit {
 
   loadMore(page: number) {
     this.store.dispatch(loadMore({filters: this.selectedFilters, page}));
+  }
+
+  onThemeSwitchChange() {
+    this.themingService.toggleTheme();
   }
 
 }
