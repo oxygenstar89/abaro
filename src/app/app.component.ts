@@ -7,11 +7,12 @@ import { Subscription, combineLatest, map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectSubtypes, selectSupertypes, selectTypes } from './store/types/types.selector';
 import { loadSubtypes, loadSupertypes, loadTypes } from './store/types/types.actions';
-import { selectCards, selectCardsLoadingState } from './store/cards/cards.selector';
+import { selectCards, selectCardsLoadingState, selectSimilarPokemons } from './store/cards/cards.selector';
 import { loadCards, loadCardsWithFilters, loadMore, setSimilarPokemons } from './store/cards/cards.actions';
 import { PokedexDataService } from './services/pokedex-data.service';
 import { MatButtonModule } from '@angular/material/button';
 import { ThemingService } from './services/theming.service';
+import { ChartComponent } from "./components/chart/chart.component";
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ import { ThemingService } from './services/theming.service';
     ListComponent,
     FilterComponent,
     MatButtonModule,
+    ChartComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -42,6 +44,7 @@ export class AppComponent implements OnInit {
   supertypes$ = this.store.select(selectSupertypes);
   cards$ = this.store.select(selectCards);
   cardsLoading$ = this.store.select(selectCardsLoadingState);
+  showChart = false;
 
   ngOnInit(): void {
     this.store.dispatch(loadTypes());

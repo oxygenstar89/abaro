@@ -1,6 +1,12 @@
 <main>
   <div class="content">
       <button mat-stroked-button (click)="onThemeSwitchChange()">Change theme</button>
+      <button mat-stroked-button (click)="showChart = !showChart">{{showChart ? 'Hide' : 'Show'}} chart</button>
+      @if(showChart) {
+        <div class="chart-wrapper">
+          <app-chart></app-chart>
+        </div>
+      }
       <div class="pokedex">
         <div class="filters-wrapper">
           <span>Filter by:</span>
